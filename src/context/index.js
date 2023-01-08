@@ -37,6 +37,8 @@ export const EnvironmentContext = createContext({
              */
             iouThreshold: 0.3,
         },
+        videoWidth: 0,
+        videoHeight: 0,
         predictions: [],
     },
     setEnvironment: null,

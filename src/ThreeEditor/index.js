@@ -21,6 +21,7 @@ class ThreeEditor {
         this.trackballControl = null; //控制
         this.objects = []; // 物件
         this.timer = null;
+        this.videoScale = null;
         this.predictions = [];
     }
     // 初始化
@@ -32,9 +33,10 @@ class ThreeEditor {
         this.height = this.container.offsetHeight;
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color('#ddd');
 
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({
+            alpha: true
+        });
         this.renderer.setClearColor(0x000000, 0.0);
         this.renderer.setSize(this.width, this.height);
         this.container.appendChild(this.renderer.domElement);
@@ -54,6 +56,10 @@ class ThreeEditor {
                 self.camera.bottom = -self.height * 0.5;
                 self.camera.updateProjectionMatrix();
                 self.renderer.setSize(self.width, self.height);
+                self.videoScale = {
+                    width: self.width / self.videoWidth,
+                    height: self.height / self.videoHeight,
+                }
             }, 500);
         }));
     }
@@ -65,7 +71,6 @@ class ThreeEditor {
         );
         this.camera.position.copy(new THREE.Vector3(0, 0, 1000));
         this.camera.zoom = 1;
-        // this.camera.zoom = 5;
         this.camera.updateProjectionMatrix();
         this.scene.add(this.camera);
     }
@@ -121,16 +126,24 @@ class ThreeEditor {
 
         const { scaledMesh } = this.predictions[0];
         const arr = [...scaledMesh[0]];
-        arr[0] = 320 - arr[0];
-        arr[1] = 320 - arr[1];
-        let vector = new THREE.Vector3(...arr);
-        vector.x
-        // this.width, this.height
 
-        // console.log(vector);
+        arr[0] = this.width * 0.5 - this.videoScale.width * arr[0];
+        arr[1] = this.height * 0.5 - this.videoScale.height * arr[1];
+        let vector = new THREE.Vector3(...arr);
+
         object.position.copy(vector);
 
         return object;
+    }
+    // 更新特徵資訊
+    updateVideoSize(environment) {
+        this.videoWidth = environment.videoWidth;
+        this.videoHeight = environment.videoHeight;
+        // console.log("Video Size:", this.videoWidth, this.videoHeight);
+        this.videoScale = {
+            width: this.width / this.videoWidth,
+            height: this.height / this.videoHeight,
+        };
     }
     // 更新特徵資訊
     updatePredictions(environment) {

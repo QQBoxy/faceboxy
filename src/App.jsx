@@ -8,12 +8,8 @@ function App() {
 
     return (
         <EnvironmentProvider>
-            <div className={styles.app}>
-                <FaceCanvas></FaceCanvas>
-            </div>
-            <div className={styles.app}>
-                <Facemesh></Facemesh>
-            </div>
+            <Facemesh></Facemesh>
+            <FaceCanvas></FaceCanvas>
         </EnvironmentProvider>
     );
 }

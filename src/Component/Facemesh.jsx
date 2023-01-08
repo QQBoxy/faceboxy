@@ -13,10 +13,7 @@ function Facemesh() {
         const video = videoRef.current;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: 640,
-                    height: 480,
-                },
+                video: true,
                 audio: false,
             });
             video.srcObject = stream;
@@ -43,10 +40,13 @@ function Facemesh() {
         // 取得影片
         await getVideo();
         // 臉部偵測
+        const video = videoRef.current;
         await facemesh(environment.facemeshOptions, (result) => {
             // 更新特徵資訊
             setEnvironment({
                 ...environment,
+                videoWidth: video.videoWidth,
+                videoHeight: video.videoHeight,
                 predictions: result
             });
         });
@@ -61,27 +61,14 @@ function Facemesh() {
 
     return (
         <>
-            <div className={styles.video}>
-                <video
-                    style={{
-                        transform: "rotateY(180deg)"
-                    }}
-                    autoPlay={true}
-                    width="640"
-                    height="480"
-                    ref={videoRef}
-                ></video>
+            <video
+                className={styles.video}
+                autoPlay={true}
+                ref={videoRef}
+            ></video>
+            <div className={styles.modelLoading}>
+                {modelLoading && "Model Loading ..."}
             </div>
-            <div>{modelLoading ? "Model Loading ..." : "Model Loaded!"}</div>
-            {/* <div>{ml5.version}</div>
-            <div>
-                <textarea
-                    className={styles.textarea}
-                    rows="20"
-                    value={JSON.stringify(environment.predictions, null, 2)}
-                    onChange={handleChange}
-                ></textarea>
-            </div> */}
         </>
     );
 }

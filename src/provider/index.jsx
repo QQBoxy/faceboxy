@@ -3,7 +3,6 @@ import { EnvironmentContext } from "../context/index";
 
 export const EnvironmentProvider = ({ children }) => {
 
-    // const { coordinate, setCoordinate } = useState({ x: 0, y: 0, z: 0 });
     const [environment, setEnvironment] = useState({
         facemeshOptions: {
             flipHorizontal: false,
@@ -13,6 +12,8 @@ export const EnvironmentProvider = ({ children }) => {
             scoreThreshold: 0.75,
             iouThreshold: 0.3,
         },
+        videoWidth: 0,
+        videoHeight: 0,
         predictions: [],
     });
     const defaultValue = {

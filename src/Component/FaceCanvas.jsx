@@ -20,22 +20,24 @@ function FaceCanvas() {
     useEffect(() => {
         if (environment) {
             if (environment.predictions.length > 0) {
-                setPos({
-                    x: parseInt(320 - environment?.predictions[0]?.scaledMesh[0][0], 10),
-                    y: parseInt(320 - environment?.predictions[0]?.scaledMesh[0][1], 10),
-                    z: parseInt(environment?.predictions[0]?.scaledMesh[0][2], 10),
-                });
                 ThreeEditor.updatePredictions(environment);
-                ThreeEditor.updateSphere("sphere");
+                const sphere = ThreeEditor.updateSphere("sphere");
+                setPos(sphere.position);
             }
+        }
+    }, [environment]);
+
+    useEffect(() => {
+        if (environment) {
+            if (ThreeEditor.videoWidth || ThreeEditor.videoHeight) return;
+            ThreeEditor.updateVideoSize(environment);
         }
     }, [environment]);
 
     return (
         <>
             <div ref={canvasRef} id="container" className={styles.container}></div>
-            <div>{`(scaledMesh[0] x: ${pos.x}, y: ${pos.y}, z: ${pos.z})`}</div>
-
+            <div className={styles.coordinate}>{`scaledMesh[0]: (x: ${parseInt(pos.x, 10)}, y: ${parseInt(pos.y, 10)}, z: ${parseInt(pos.z, 10)})`}</div>
         </>
     );
 }
