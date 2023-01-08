@@ -1,0 +1,8 @@
+.video {
+    height: 480px;
+}
+
+.textarea {
+    width: 100%;
+    overflow: "visible";
+}
