@@ -2,23 +2,23 @@ import * as THREE from 'three';
 
 class ThreeEditor {
     constructor() {
-        //預設值
+        // 預設值
         this.DEFAULT_CAMERA = new THREE.OrthographicCamera(
             -50, 50, 50, -50, -1500, 1500
         );
         this.DEFAULT_CAMERA.name = 'CameraBoxy';
         this.DEFAULT_CAMERA.position.set(0, 0, 1000);
 
-        //環境參數
+        // 環境參數
         this.container = null;
-        this.width = 100; //元素寬
-        this.height = 100; //元素高
-        this.scene = null; //場景
-        this.camera = this.DEFAULT_CAMERA.clone(); //相機
-        this.renderer = null; //渲染器
-        this.light = null; //光源
-        this.orbitControl = null; //控制
-        this.trackballControl = null; //控制
+        this.width = 100; // 元素寬
+        this.height = 100; // 元素高
+        this.scene = null; // 場景
+        this.camera = this.DEFAULT_CAMERA.clone(); // 相機
+        this.renderer = null; // 渲染器
+        this.light = null; // 光源
+        this.orbitControl = null; // 控制
+        this.trackballControl = null; // 控制
         this.objects = []; // 物件
         this.timer = null;
         this.videoScale = null;
@@ -74,12 +74,12 @@ class ThreeEditor {
         this.camera.updateProjectionMatrix();
         this.scene.add(this.camera);
     }
-    //設定光源
+    // 設定光源
     setLight() {
-        //環境光源
+        // 環境光源
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
         this.scene.add(ambientLight);
-        //點光源
+        // 點光源
         const pointLight1 = new THREE.PointLight(0xffffff, 0.1, 0);
         const pointLight2 = new THREE.PointLight(0xffffff, 0.1, 0);
         const pointLight3 = new THREE.PointLight(0xffffff, 0.1, 0);
@@ -95,7 +95,7 @@ class ThreeEditor {
         this.camera.add(pointLight3);
         this.camera.add(pointLight4);
         this.camera.add(pointLight5);
-        //半球光源
+        // 半球光源
         const hemisphereLight = new THREE.HemisphereLight(0x756450, 0x456282, 0.1);
         this.scene.add(hemisphereLight);
     }
