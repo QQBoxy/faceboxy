@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 class ThreeEditor {
     constructor() {
@@ -6,7 +6,7 @@ class ThreeEditor {
         this.DEFAULT_CAMERA = new THREE.OrthographicCamera(
             -50, 50, 50, -50, -1500, 1500
         );
-        this.DEFAULT_CAMERA.name = 'CameraBoxy';
+        this.DEFAULT_CAMERA.name = "CameraBoxy";
         this.DEFAULT_CAMERA.position.set(0, 0, 1000);
 
         // 環境參數
@@ -21,6 +21,8 @@ class ThreeEditor {
         this.trackballControl = null; // 控制
         this.objects = []; // 物件
         this.timer = null;
+        this.videoWidth = 0;
+        this.videoHeight = 0;
         this.videoScale = null;
         this.predictions = [];
     }
@@ -41,11 +43,11 @@ class ThreeEditor {
         this.renderer.setSize(this.width, this.height);
         this.container.appendChild(this.renderer.domElement);
 
-        this.renderer.domElement.style.position = 'absolute';
+        this.renderer.domElement.style.position = "absolute";
 
         this.setCamera();
 
-        window.addEventListener('resize', (function () {
+        window.addEventListener("resize", (function () {
             clearTimeout(self.timer);
             self.timer = setTimeout(function () {
                 self.width = self.container.offsetWidth;
@@ -59,7 +61,7 @@ class ThreeEditor {
                 self.videoScale = {
                     width: self.width / self.videoWidth,
                     height: self.height / self.videoHeight,
-                }
+                };
             }, 500);
         }));
     }
@@ -101,7 +103,7 @@ class ThreeEditor {
     }
     // 動畫
     animate() {
-        requestAnimationFrame(this.animate.bind(this));
+        window.requestAnimationFrame(this.animate.bind(this));
         this.orbitControl && this.orbitControl.update();
         this.trackballControl && this.trackballControl.update();
         this.render();
@@ -109,6 +111,15 @@ class ThreeEditor {
     // 渲染
     render() {
         this.renderer.render(this.scene, this.camera);
+    }
+    addMesh(mesh) {
+        this.scene.add(mesh);
+        return mesh;
+    }
+    getMesh(name) {
+        const object = this.scene.getObjectByName(name);
+        if (!object) return null;
+        return object;
     }
     // 球
     addSphere() {
@@ -136,18 +147,17 @@ class ThreeEditor {
         return object;
     }
     // 更新特徵資訊
-    updateVideoSize(environment) {
-        this.videoWidth = environment.videoWidth;
-        this.videoHeight = environment.videoHeight;
-        // console.log("Video Size:", this.videoWidth, this.videoHeight);
+    updateVideoSize(video) {
+        this.videoWidth = video.videoWidth;
+        this.videoHeight = video.videoHeight;
         this.videoScale = {
             width: this.width / this.videoWidth,
             height: this.height / this.videoHeight,
         };
     }
     // 更新特徵資訊
-    updatePredictions(environment) {
-        this.predictions = environment.predictions;
+    updatePredictions(predictions) {
+        this.predictions = predictions;
     }
 }
 

@@ -5,7 +5,7 @@ import { EnvironmentContext } from "../context/index";
 
 function FaceCanvas() {
     const canvasRef = useRef(undefined);
-    const { environment } = useContext(EnvironmentContext);
+    const { video, predictions } = useContext(EnvironmentContext);
     const [pos, setPos] = useState({ x: 0, y: 0, z: 0 });
 
     useEffect(() => {
@@ -18,21 +18,21 @@ function FaceCanvas() {
     }, [canvasRef]);
 
     useEffect(() => {
-        if (environment) {
-            if (environment.predictions.length > 0) {
-                ThreeEditor.updatePredictions(environment);
+        if (predictions) {
+            if (predictions.length > 0) {
+                ThreeEditor.updatePredictions(predictions);
                 const sphere = ThreeEditor.updateSphere("sphere");
                 setPos(sphere.position);
             }
         }
-    }, [environment]);
+    }, [predictions]);
 
     useEffect(() => {
-        if (environment) {
+        if (video) {
             if (ThreeEditor.videoWidth || ThreeEditor.videoHeight) return;
-            ThreeEditor.updateVideoSize(environment);
+            ThreeEditor.updateVideoSize(video);
         }
-    }, [environment]);
+    }, [video]);
 
     return (
         <>
