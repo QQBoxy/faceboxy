@@ -5,8 +5,7 @@ import { EnvironmentContext } from "../context/index";
 
 function Facemesh() {
     const videoRef = useRef(undefined);
-    const { facemeshOptions, setVideo, setPredictions } = useContext(EnvironmentContext);
-    const [modelLoading, setModelLoading] = useState(false);
+    const { facemeshOptions, setVideo, setPredictions, setLoadingMask } = useContext(EnvironmentContext);
 
     // 取得影片
     const getVideo = async () => {
@@ -26,6 +25,11 @@ function Facemesh() {
         }
     };
 
+    /**
+     * facemesh
+     * @param {Function} predictionFunc
+     * @returns {Promise} callback function
+     */
     const facemesh = (predictionFunc) => {
         return new Promise((resolve, reject) => {
             // ml5 臉部特徵偵測
@@ -36,23 +40,18 @@ function Facemesh() {
     };
 
     const setup = async () => {
-        setModelLoading(true);
+        setLoadingMask(true);
         // 取得影片
         await getVideo();
         // 臉部偵測
         const video = videoRef.current;
         await facemesh((result) => {
-
             // 更新 Video
-            setVideo({
-                videoWidth: video.videoWidth,
-                videoHeight: video.videoHeight,
-            });
-
+            setVideo(video);
             // 更新特徵資訊
             setPredictions(result);
         });
-        setModelLoading(false);
+        setLoadingMask(false);
     };
 
     useEffect(() => {
@@ -63,13 +62,12 @@ function Facemesh() {
 
     return (
         <>
-            <video
-                className={styles.video}
-                autoPlay={true}
-                ref={videoRef}
-            ></video>
-            <div className={styles.modelLoading}>
-                {modelLoading && "Model Loading ..."}
+            <div className={styles.facemesh}>
+                <video
+                    className={styles.video}
+                    autoPlay={true}
+                    ref={videoRef}
+                ></video>
             </div>
         </>
     );

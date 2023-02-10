@@ -11,18 +11,15 @@ const EnvironmentProvider = ({ children }) => {
         scoreThreshold: 0.75,
         iouThreshold: 0.3,
     });
-
-    const [video, setVideo] = useState({
-        videoWidth: 0,
-        videoHeight: 0,
-    });
-
+    const [video, setVideo] = useState(null);
     const [predictions, setPredictions] = useState([]);
+    const [loadingMask, setLoadingMask] = useState(false);
 
     const defaultValue = {
         video, setVideo,
         facemeshOptions, setFacemeshOptions,
         predictions, setPredictions,
+        loadingMask, setLoadingMask,
     };
 
     return (

@@ -1,6 +1,7 @@
 import React from "react";
 import Facemesh from "./Component/Facemesh";
 import FaceCanvas from "./Component/FaceCanvas";
+import LoadingMask from "./Component/LoadingMask";
 import { EnvironmentProvider } from "./provider/index";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
         <EnvironmentProvider>
             <Facemesh></Facemesh>
             <FaceCanvas></FaceCanvas>
+            <LoadingMask></LoadingMask>
         </EnvironmentProvider>
     );
 }

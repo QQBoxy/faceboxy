@@ -1,14 +1,10 @@
-.video {
-    transform: rotateY(180deg);
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: -3;
+.facemesh {
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
-.modelLoading {
-    position: absolute;
-    padding-top: 18px;
-    color: #ff0000;
+.video {
+    transform: rotateY(180deg);
+    display: none;
 }

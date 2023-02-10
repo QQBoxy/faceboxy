@@ -6,13 +6,14 @@ import { EnvironmentContext } from "../context/index";
 function FaceCanvas() {
     const canvasRef = useRef(undefined);
     const { video, predictions } = useContext(EnvironmentContext);
-    const [pos, setPos] = useState({ x: 0, y: 0, z: 0 });
 
     useEffect(() => {
         if (canvasRef) {
             if (ThreeEditor.container) return;
             ThreeEditor.init(canvasRef.current);
-            ThreeEditor.addSphere();
+            ThreeEditor.addMultiSphere("sphere", 468);
+            // ThreeEditor.addRectangle("rectangle");
+            // ThreeEditor.addHelper();
             ThreeEditor.animate();
         }
     }, [canvasRef]);
@@ -21,15 +22,15 @@ function FaceCanvas() {
         if (predictions) {
             if (predictions.length > 0) {
                 ThreeEditor.updatePredictions(predictions);
-                const sphere = ThreeEditor.updateSphere("sphere");
-                setPos(sphere.position);
+                ThreeEditor.updateMultiSphere("sphere", 468);
             }
         }
     }, [predictions]);
 
     useEffect(() => {
         if (video) {
-            if (ThreeEditor.videoWidth || ThreeEditor.videoHeight) return;
+            if (ThreeEditor.video) return;
+            ThreeEditor.addVideo("video", video);
             ThreeEditor.updateVideoSize(video);
         }
     }, [video]);
@@ -37,7 +38,6 @@ function FaceCanvas() {
     return (
         <>
             <div ref={canvasRef} id="container" className={styles.container}></div>
-            <div className={styles.coordinate}>{`scaledMesh[0]: (x: ${parseInt(pos.x, 10)}, y: ${parseInt(pos.y, 10)}, z: ${parseInt(pos.z, 10)})`}</div>
         </>
     );
 }

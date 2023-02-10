@@ -1,0 +1,8 @@
+{
+    "plugins": [],
+    "source": {
+        "includePattern": ".+\\.jsx?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "sourceType": "module"
+}

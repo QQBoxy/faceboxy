@@ -37,13 +37,13 @@ export const EnvironmentContext = createContext({
         iouThreshold: 0.3,
     },
     setFacemeshOptions: null,
-    // 影像大小
-    video: {
-        videoWidth: 0,
-        videoHeight: 0,
-    },
+    // Camera Video
+    video: null,
     setVideo: null,
     // 特徵資訊
     predictions: [],
     setPredictions: null,
+    // Loading Mask
+    loadingMask: false,
+    setLoadingMask: null,
 });

@@ -4,8 +4,3 @@
     height: 100%;
     z-index: -2;
 }
-
-.coordinate {
-    position: absolute;
-    color: #ff0000;
-}

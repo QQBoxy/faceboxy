@@ -21,9 +21,9 @@ class ThreeEditor {
         this.trackballControl = null; // 控制
         this.objects = []; // 物件
         this.timer = null;
-        this.videoWidth = 0;
-        this.videoHeight = 0;
+        this.video = null;
         this.videoScale = null;
+        this.scale = 1.0;
         this.predictions = [];
     }
     // 初始化
@@ -35,9 +35,10 @@ class ThreeEditor {
         this.height = this.container.offsetHeight;
 
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color("#ffffff");
 
         this.renderer = new THREE.WebGLRenderer({
-            alpha: true
+            // alpha: true
         });
         this.renderer.setClearColor(0x000000, 0.0);
         this.renderer.setSize(this.width, this.height);
@@ -59,8 +60,8 @@ class ThreeEditor {
                 self.camera.updateProjectionMatrix();
                 self.renderer.setSize(self.width, self.height);
                 self.videoScale = {
-                    width: self.width / self.videoWidth,
-                    height: self.height / self.videoHeight,
+                    width: self.width / self.video.videoWidth,
+                    height: self.height / self.video.videoHeight,
                 };
             }, 500);
         }));
@@ -121,6 +122,34 @@ class ThreeEditor {
         if (!object) return null;
         return object;
     }
+    // 開發工具
+    addHelper() {
+        const axesHelper = new THREE.AxesHelper(100);
+        this.scene.add(axesHelper);
+    }
+    /**長方框
+     * a — b
+     * |   |
+     * d — c
+     */
+    addRectangle(name) {
+        const material = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+
+        const points = [];
+        points.push(new THREE.Vector3(- 10, 10, 0)); // a
+        points.push(new THREE.Vector3(10, 10, 0)); // b
+        points.push(new THREE.Vector3(10, -10, 0)); // c
+        points.push(new THREE.Vector3(-10, -10, 0)); // d
+
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+        const line = new THREE.LineLoop(geometry, material);
+        line.name = name;
+        this.scene.add(line);
+        return line;
+    }
     // 球
     addSphere() {
         const geometry = new THREE.SphereGeometry(15, 32, 16);
@@ -129,6 +158,16 @@ class ThreeEditor {
         sphere.name = "sphere";
         this.scene.add(sphere);
         return sphere;
+    }
+    // 多個球
+    addMultiSphere(name, num) {
+        for (let n = 0; n < num; n++) {
+            const geometry = new THREE.SphereGeometry(2, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.name = `${name}_${n}`;
+            this.scene.add(sphere);
+        }
     }
     // 更新球
     updateSphere(name) {
@@ -146,13 +185,37 @@ class ThreeEditor {
 
         return object;
     }
+    // 更新多顆球
+    updateMultiSphere(name, num) {
+        for (let n = 0; n < num; n++) {
+            const pos = this.predictions[0].scaledMesh[n];
+            const object = this.scene.getObjectByName(`${name}_${n}`);
+            if (!object) continue;
+            if (this.video) {
+                object.position.x = this.video.videoWidth * 0.5 - pos[0];
+                object.position.y = this.video.videoHeight * 0.5 - pos[1];
+            }
+        }
+    }
+    addVideo(name, video) {
+        if (!video) return;
+        const geometry = new THREE.PlaneGeometry(video.videoWidth, video.videoHeight);
+        const texture = new THREE.VideoTexture(video);
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.repeat.x = - 1;
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.name = name;
+        this.scene.add(mesh);
+        return mesh;
+    }
     // 更新特徵資訊
     updateVideoSize(video) {
-        this.videoWidth = video.videoWidth;
-        this.videoHeight = video.videoHeight;
+        this.video = video;
         this.videoScale = {
-            width: this.width / this.videoWidth,
-            height: this.height / this.videoHeight,
+            width: this.width / video.videoWidth,
+            height: this.height / video.videoHeight,
         };
     }
     // 更新特徵資訊
