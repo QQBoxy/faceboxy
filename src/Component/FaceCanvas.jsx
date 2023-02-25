@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useState, useEffect } from "react";
-import ThreeEditor from "../ThreeEditor/index";
+import { editor, control, model, helper, face } from "../ThreeEditor/index";
 import styles from "./FaceCanvas.module.css";
 import { EnvironmentContext } from "../context/index";
 
@@ -9,29 +9,30 @@ function FaceCanvas() {
 
     useEffect(() => {
         if (canvasRef) {
-            if (ThreeEditor.container) return;
-            ThreeEditor.init(canvasRef.current);
-            ThreeEditor.addMultiSphere("sphere", 468);
-            // ThreeEditor.addRectangle("rectangle");
-            // ThreeEditor.addHelper();
-            ThreeEditor.animate();
+            if (editor.container) return;
+            editor.init(canvasRef.current);
+            control.setOrbitControl();
+            model.addMultiSphere("sphere", 468);
+            helper.addAxesHelper();
+            // helper.addDatGUI();
+            editor.animate();
         }
     }, [canvasRef]);
 
     useEffect(() => {
         if (predictions) {
             if (predictions.length > 0) {
-                ThreeEditor.updatePredictions(predictions);
-                ThreeEditor.updateMultiSphere("sphere", 468);
+                face.updatePredictions(predictions);
+                model.updateMultiSphere("sphere", 468);
             }
         }
     }, [predictions]);
 
     useEffect(() => {
         if (video) {
-            if (ThreeEditor.video) return;
-            ThreeEditor.addVideo("video", video);
-            ThreeEditor.updateVideoSize(video);
+            if (editor.video) return;
+            face.addVideo("video", video);
+            face.updateVideoSize(video);
         }
     }, [video]);
 
