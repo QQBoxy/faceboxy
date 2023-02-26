@@ -1,7 +1,9 @@
 import React, { useRef, useContext, useState, useEffect } from "react";
-import { editor, control, model, helper, face } from "../ThreeEditor/index";
+import { editor, control, model, helper, datGui, face } from "../ThreeEditor/index";
 import styles from "./FaceCanvas.module.css";
 import { EnvironmentContext } from "../context/index";
+// import stlUrl from "../assets/SphereD2Binary.stl?url";
+import stlUrl from "../assets/Anterior_Teeth.stl?url";
 
 function FaceCanvas() {
     const canvasRef = useRef(undefined);
@@ -11,10 +13,12 @@ function FaceCanvas() {
         if (canvasRef) {
             if (editor.container) return;
             editor.init(canvasRef.current);
+            editor.setLight();
             control.setOrbitControl();
             model.addMultiSphere("sphere", 468);
+            model.addSTL("stl", stlUrl);
             helper.addAxesHelper();
-            // helper.addDatGUI();
+            // datGui.addDatGUI();
             editor.animate();
         }
     }, [canvasRef]);
@@ -24,6 +28,7 @@ function FaceCanvas() {
             if (predictions.length > 0) {
                 face.updatePredictions(predictions);
                 model.updateMultiSphere("sphere", 468);
+                model.updateSTL("stl");
             }
         }
     }, [predictions]);

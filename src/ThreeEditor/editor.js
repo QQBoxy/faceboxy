@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { control, helper } from "../ThreeEditor/index";
+import { control } from "../ThreeEditor/index";
 
 class ThreeEditor {
     constructor() {
@@ -58,10 +58,6 @@ class ThreeEditor {
                 self.camera.bottom = -self.height * 0.5;
                 self.camera.updateProjectionMatrix();
                 self.renderer.setSize(self.width, self.height);
-                // helper.data.width = self.width;
-                // helper.data.height = self.height;
-                // helper.data.videoWidth = self.video.videoWidth;
-                // helper.data.videoHeight = self.video.videoHeight;
                 self.videoScale = {
                     width: self.width / self.video.videoWidth,
                     height: self.height / self.video.videoHeight,
